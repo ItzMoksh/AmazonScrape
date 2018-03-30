@@ -1,9 +1,9 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 import re
-KW = input("Enter Item to be searched of Amazon.in: ")
+KW = input("Enter the item to be searched on Amazon.in: ")
 URL = "https://www.amazon.in/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=" + KW
-uCLient = uReq(URL)
+uCLient = uReq(URL) #urllib.request.urlopen()
 html = uCLient.read()
 uCLient.close()
 Filename = KW+".csv"
