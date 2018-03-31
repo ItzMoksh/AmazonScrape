@@ -14,20 +14,17 @@ page_soup = soup(html, "html.parser")
 Containers = page_soup.findAll("div",{"class":"s-item-container"})
 print("Creating Database for",len(Containers),"items...")
 for Container in Containers[1:]: #Each container has details of the item searched 
-    str = Container.div.text
-    Model = str.split("by")
-    Price = Model[1].split('\xa0')
-    Price = Price[2]
-    Price = re.findall(r'[0-9]*[,][0-9]*',Price)
-    Price = Price[0]
-    Model = Model[0]
-    tmp = str.split("stars")
-    tmp = tmp[0].split(" ")
-    tmp = tmp[len(tmp) - 5].split("\n")
-    tmp = tmp[len(tmp) - 1]    
-    if (re.findall(r'[0-9][.][0-9]',tmp)):
-        Ratings = tmp
-    else:
-        Ratings = "N/A"
+    str = Container.div
+    Model = Container.div.div.img['alt']
+    tmp = (Container.findAll("span",{"class":"a-size-base a-color-price a-text-bold"}))
+    if tmp == []:
+        tmp = Container.findAll("span",{"class":"a-size-base a-color-price s-price a-text-bold"})
+    Price = tmp[0].text
+    tmp = Container.findAll("span",{"class":"a-icon-alt"})
+    for items in tmp:
+        if re.findall(r'[0-5][.]*[0-9]*',items.text):
+            Ratings = items.text
+        else:
+            Ratings = "N/A"
     fp.write(Model.replace(",", " ") + "," + Price.replace(",", " ") + "," + Ratings + "\n")
 fp.close()
